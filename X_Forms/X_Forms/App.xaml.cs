@@ -13,7 +13,10 @@ namespace X_Forms
             InitializeComponent();
 
             //Zuweisung der MainPage-Property zu einer Page
-            MainPage = new MainPage();
+            //MainPage = new MainPage();
+
+            //Zuweisung der MainPage - Property zu einer NavigationPage(ermöglicht Stack - Navigation) mit Angabe der Startpage.
+            MainPage = new NavigationPage(new MainPage());
         }
 
         public DateTime TimeStamp { get; set; }

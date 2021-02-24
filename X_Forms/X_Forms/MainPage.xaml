@@ -123,11 +123,31 @@
                             Dadurch finden Kurzbindungen an die Properties der Listenelemente statt.-->
                         <Label Text="{Binding}"
                                TextColor="Black"/>
+
+                        <!--ContextActions werden angezeigt, wenn der Benutzer (unter Android) länger auf eine Objekt 'touched'-->
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="Delete" Clicked="MenuItem_Clicked" CommandParameter="{Binding}"/>
+                        </ViewCell.ContextActions>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
+        <!--Verweis auf Beispiel-Layouts und -Navigation (vgl. CodeBehind, NavigationBsp und Layouts)-->
+        <StackLayout Orientation="Horizontal">
+            <Button Text="Tabbed"
+                    Clicked="Btn_Push"/>
+            <Button Text="Carousel"
+                    Clicked="Btn_Carousel"/>
+            <Button Text="RelativLayout"
+                    Clicked="Btn_PushModal"/>
+        </StackLayout>
+
     </StackLayout>
+
+    <!--Wird die ContentPage in einer Navigation Page angezeigt, hat diese Zugriff auf die ToolBar-->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Clear List" Clicked="ToolbarItem_Clicked"/>
+    </ContentPage.ToolbarItems>
 
 </ContentPage>

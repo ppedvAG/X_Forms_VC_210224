@@ -53,5 +53,41 @@ namespace X_Forms
             if (erg)
                 await DisplayAlert("Gerne", "Gerne", "ok");
         }
+
+        private void Btn_Push(object sender, EventArgs e)
+        {
+            //Aufruf einer neuen Seite innerhalb der aktuellen NavigationPage 
+            Navigation.PushAsync(new NavigationBsp.TabbedPageBsp());
+        }
+
+        private void Btn_PushModal(object sender, EventArgs e)
+        {
+            //Aufruf einer neuen Seite innerhalb der aktuellen NavigationPage, welche aber keinen 'Zurück'-Button anzeigt
+            Navigation.PushModalAsync(new Layouts.RelativeLay());
+        }
+
+        private void ToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            Namensliste.Clear();
+        }
+
+        private async void MenuItem_Clicked(object sender, EventArgs e)
+        {
+            //Anzeige einer 'MessageBox' und Abfrage der User-Antwort
+            bool result = await DisplayAlert("Löschung", "Soll diese Person wirklich gelöscht werden?", "Ja", "Nein");
+
+            if (result)
+            {
+                //Löschen eines Listeneintrags
+                string person = (sender as MenuItem).CommandParameter.ToString();
+
+                Namensliste.Remove(person);
+            }
+        }
+
+        private void Btn_Carousel(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new NavigationBsp.CarouselPageBsp());
+        }
     }
 }
