@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--vgl. CodeBehind-->
+
+<!--Jede XAML-Datei hat einen Root-Container, welcher die Art der UI bestimmt. Dieser muss mit der Mutterklasse im CodeBehind übereinstimmen-->
+<!--Im Root-Container werden die in diesem Dokument benutzten Namespaces definiert, sowie der Verweis auf die anhängige Klasse (CodeBehind)-->
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:X_Forms"
+             x:Class="X_Forms.MainPage"
+             Title="MAIN">
+
+    <!--Jeder Container hat eine Resource-Property, in welcher Ressourcen (Objekte, Styles, Converter, ...) für diesen 
+    Container bereit gestellt werden können.-->
+    <ContentPage.Resources>
+        <!--Über das Präfix (Zeichen vor dem Doppelpunkt) wird der entsprechende Namespace angesteuert-->
+        <!--Jede Ressource (außer globalen Styles) benötigen einen Key, über welche diese angersteuert werden können.-->
+        <x:String x:Key="BtnString">Hallo, ich bin eine Ressource</x:String>
+        <local:FactorConverter x:Key="factorConv"/>
+    </ContentPage.Resources>
+
+    <!--Properties können direkt im einleitenden Tag mittels der Attribute gesetzt werden.-->
+    <!--Vertical und HorizontalObptions definieren das Anzeige-Verhalten des UI-Elements in Bezug auf umgebende Objekte.-->
+    <!--Padding definiert einen Abstand des UI-Elements zu inneren Elementen.-->
+    <!--Container, welche die Children-Property besitzen können mehrere Elemente beinhalten-->
+    <StackLayout Orientation="Vertical"
+                 HorizontalOptions="FillAndExpand"
+                 VerticalOptions="FillAndExpand"
+                 BackgroundColor="LightBlue"
+                 Padding="5,10,15,20"
+                 Spacing="10">
+        
+        <!--Einfache Property-Belegungen werden in Attribut-Form direkt in den Start-Tag geschrieben-->
+        <Label x:Name="Lbl_Main"
+               TextColor="Green">
+            <!--Jedes UI-Element hat eien Standart-Property, auf die direkt zugegriffen werden kann (meißt Text, Children, Content)-->
+            Hallo Welt
+            <!--Wenn Properties mit komplexeren Elementen gefüllt werden sollen, können diese ausgelagert werden.-->
+            <Label.BackgroundColor>
+                <!--Unterschiedliche Werte auf verschiedenen OS in derselben Property-->
+                <OnPlatform Android="Yellow" iOS="Orange" Default="Green"/>
+            </Label.BackgroundColor>
+            <Label.FontSize>
+                <!--Unterschiedliche Werte auf verschiedenen Geräten in derselben Property-->
+                <OnIdiom Phone="Small" TV="Large"/>
+            </Label.FontSize>
+        </Label>
+
+        <!--Dieser Button nimmt den globalen Button-Style an (vgl. RessourceDict.xaml)-->
+        <Button x:Name="Btn_KlickMich"
+                Text="Hallo" 
+                Clicked="Btn_KlickMich_Clicked"/>
+
+        <!--Die Placeholder-Property des Entries wird im Textfeld angezeigt, solange der Benutzer noch keinen Eintrag getätigt hat-->
+        <!--Die Keyboard-Property definiert das angezeigte Eingabefeld-->
+        <Entry x:Name="Ent_Vorname"
+               Placeholder="Vorname"
+               Keyboard="Text"/>
+        <Entry x:Name="Ent_Nachname"
+               Placeholder="Nachname"
+               Keyboard="Text"/>
+
+        <Picker Title="Monkeys">
+            <Picker.Items>
+                <x:String>Baboon</x:String>
+                <x:String>Capuchin Monkey</x:String>
+                <x:String>Blue Monkey</x:String>
+                <x:String>Squirrel Monkey</x:String>
+            </Picker.Items>
+        </Picker>
+
+        <!--Dieser Button nimmt einen explizieten Button-Style an (vgl. RessourceDict.xaml)-->
+        <!--Mittels einer StaticResource-Bindung kann auf in übergeordneten Container definierte Ressourcen zugegriffen werden-->
+        <Button Text="{StaticResource BtnString}"
+                FontSize="{StaticResource FontSize}"
+                Style="{StaticResource BtnStyle}"
+                TextColor="Yellow"
+                Clicked="Button_Clicked"/>
+        
+        <!--Grafische Ressourcen müssen in den einzelnen OS-Projekten abgelegt sein (z.B. Android/Resources/drawable)-->
+        <ImageButton Source="test.png"
+                     WidthRequest="50"
+                     BackgroundColor="Transparent"
+                     BorderColor="Transparent"
+                     HorizontalOptions="Center"
+                     Clicked="Button_Clicked"/>
+
+        <!--Bindungen-->
+        <!--Mittels Bindungen können Properties von UI-Elementen miteinander verknüpft werden.-->
+        <StackLayout Orientation="Horizontal">
+            <Slider x:Name="Sdr_Binding_01"
+                    Minimum="0"
+                    Maximum="100"
+                    WidthRequest="250"/>
+            <!--Mittels einer Markup-Extension ({}-Klammern) kann eine Property an eine andere Property gebunden werden. Die Property,
+                welche die Markup-Extension beinhaltet, gilt als Target-Property-->
+            <Label Text="{Binding Source={x:Reference Sdr_Binding_01}, Path=Value, Mode=OneWay, StringFormat='Wert: {0}'}"/>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal">
+            <Slider x:Name="Sdr_Binding_02"
+                    Minimum="0"
+                    Maximum="100"
+                    WidthRequest="250"/>
+            <!--Soll der Wert nicht unverandert übertragen werden oder sind die Property-Typen unterschiedlich muss ein Converter
+                zwischengeschaltet werden (vgl. FactorConverter.cs)-->
+            <Label Text="{Binding Source={x:Reference Sdr_Binding_02}, Path=Value, 
+                    Mode=OneWay, StringFormat='Wert: {0}',
+                    Converter={StaticResource factorConv},
+                    ConverterParameter=2.5}"/>
+        </StackLayout>
+
+        <!--Die Property 'ItemSource' verweist auf die Quelle der Items für die Liste.
+            Hier wurde sie per Kurzbindung an die Property 'NamenListe' des BindingContextes 
+            der Page gebunden. Vgl CB-->
+        <ListView x:Name="LstV_Namen" HeightRequest="100"
+                      ItemsSource="{Binding Namensliste}">
+            <ListView.ItemTemplate>
+                <!--Mittels DataTemplates kann das Erscheinen von einzelnen Elementen von ItemControls (hier ListView) defniert werden.
+                    DataTemplates müssen immer ein UI-Element vom Typ Cell beinhalten.-->
+                <DataTemplate>
+                    <ViewCell>
+                        <!--Innerhalb von ItemControls findet immer ein DataBinding an die Elemente der ItemSource statt (vgl. CodeBehind).
+                            Dadurch finden Kurzbindungen an die Properties der Listenelemente statt.-->
+                        <Label Text="{Binding}"
+                               TextColor="Black"/>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </StackLayout>
+
+</ContentPage>
