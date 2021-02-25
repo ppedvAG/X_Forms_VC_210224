@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="X_Forms.BspMVVM.View.MainView"
+             xmlns:vm="clr-namespace:X_Forms.BspMVVM.ViewModel"
+             x:Name="Pg_Main">
+    
+    <ContentPage.BindingContext>
+        <vm:MainViewModel ContextPage="{x:Reference Pg_Main}"/>
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <Entry x:Name="Entry_Vorname" Placeholder="Vorname" Text="{Binding NeuerVorname}"/>
+            <Entry x:Name="Entry_Nachname" Placeholder="Nachname" Text="{Binding NeuerNachname}"/>
+            <Button x:Name="Btn_AddPerson" Text="Add" Command="{Binding AddCmd}"/>
+            
+            <ListView x:Name="LstV_Liste"
+                      ItemsSource="{Binding PersonenListe}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.ContextActions>
+                                <MenuItem Text="Delete" x:Name="CaMenu_Delete" Command="{Binding Source={x:Reference Pg_Main}, Path=BindingContext.DeleteCmd}" CommandParameter="{Binding}"/>
+                            </ViewCell.ContextActions>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding Vorname}"/>
+                                <Label Text="{Binding Nachname}"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
