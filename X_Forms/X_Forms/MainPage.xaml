@@ -7,6 +7,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:X_Forms"
              x:Class="X_Forms.MainPage"
+             xmlns:prop="clr-namespace:X_Forms.Properties"
              Title="MAIN">
 
     <!--Jeder Container hat eine Resource-Property, in welcher Ressourcen (Objekte, Styles, Converter, ...) für diesen 
@@ -58,8 +59,9 @@
         <Entry x:Name="Ent_Nachname"
                Placeholder="Nachname"
                Keyboard="Text"/>
-
-        <Picker Title="Monkeys">
+        
+        <!--Bsp eines Pickers (Äquivalent zu ComboBox)-->
+        <Picker Title="Monkeys" x:Name="Pkr_Monkeys">
             <Picker.Items>
                 <x:String>Baboon</x:String>
                 <x:String>Capuchin Monkey</x:String>
@@ -109,6 +111,9 @@
                     ConverterParameter=2.5}"/>
         </StackLayout>
 
+        <!--Label zum Anzeigen des Batterie-Status mittels Xamarin.Essentials (vgl. CodeBehind)-->
+        <Label x:Name="Lbl_Battery"/>
+
         <!--Die Property 'ItemSource' verweist auf die Quelle der Items für die Liste.
             Hier wurde sie per Kurzbindung an die Property 'NamenListe' des BindingContextes 
             der Page gebunden. Vgl CB-->
@@ -142,6 +147,16 @@
             <Button Text="RelativLayout"
                     Clicked="Btn_PushModal"/>
         </StackLayout>
+
+        <!--Beispiele für lokalisierte Beschriftungen (vgl. CodeBehind sowie Resource.resx und Resource.de.resx)-->
+        <!--Mittels der x:Static-Bindung können Properties an resx-Files gebunden werden-->
+        <StackLayout Orientation="Horizontal">
+            <!--Button zum Senden einer MC-Nachricht (vgl. CodeBehind und MC_SubscriberPage.cs)-->
+            <Button x:Name="Btn_MC" Text="{x:Static prop:Resources.Btn_MC_Text}" Clicked="Btn_MC_Clicked"/>
+            <!--Button zum Öffnen der Youtube-App-->
+            <Button x:Name="Btn_YouTube" Text="{x:Static prop:Resources.Btn_Youtube_Text}" Clicked="Btn_YouTube_Clicked"/>
+        </StackLayout>
+
 
     </StackLayout>
 

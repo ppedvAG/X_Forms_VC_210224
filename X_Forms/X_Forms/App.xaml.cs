@@ -1,4 +1,5 @@
 ﻿using System;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -27,17 +28,24 @@ namespace X_Forms
         //Methoden, welche zu bestimmten globalen Events ausgeführt werden (Start, Unterbrechen der App [Sleep], Wiederaktivierung der App [Resume])
         protected override void OnStart()
         {
-            MainPage.DisplayAlert("Time", $"Startzeit: {DateTime.Now}", "ok");
+            if(Preferences.ContainsKey("timestamp"))
+                MainPage.DisplayAlert("Time", $"Gespeicherte Zeit: {Preferences.Get("timestamp", DateTime.Now)}", "ok");
+            else
+                MainPage.DisplayAlert("Time", $"Startzeit: {DateTime.Now}", "ok");
         }
 
         protected override void OnSleep()
         {
             TimeStamp = DateTime.Now;
+
+            Preferences.Set("timestamp", DateTime.Now);
         }
 
         protected override void OnResume()
         {
-            MainPage.DisplayAlert("Time", $"Geschlafene Zeit: {DateTime.Now.Subtract(TimeStamp).TotalSeconds}", "ok");
+            DateTime time = Preferences.Get("timestamp", DateTime.Now);
+
+            MainPage.DisplayAlert("Time", $"Geschlafene Zeit: {DateTime.Now.Subtract(time).TotalSeconds}", "ok");
         }
     }
 }
